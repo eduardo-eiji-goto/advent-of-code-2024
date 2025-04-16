@@ -20,7 +20,7 @@ func main() {
 	}
 
 	fmt.Println("Total Distance:", getTotalDistance(a, b))
-
+	fmt.Println("Similarity Score:", getSimilarityScore(a, b))
 }
 
 func readInput(name string) ([]int, []int, error) {
@@ -75,4 +75,22 @@ func getTotalDistance(a []int, b []int) int {
 	}
 
 	return totalDistance
+}
+
+func getSimilarityScore(a []int, b []int) int {
+	var similarityScore int
+
+	for _, vi := range a {
+		var count int
+
+		for _, vj := range b {
+			if vi == vj {
+				count = count + 1
+			}
+		}
+
+		similarityScore = similarityScore + (vi * count)
+	}
+
+	return similarityScore
 }
