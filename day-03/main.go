@@ -18,6 +18,7 @@ func main() {
 	}
 
 	fmt.Println("Sum Valid Mults:", getSumValidMultiplications(input))
+	fmt.Println("Sum Valid Mults (Enabled):", getSumValidMultiplicationsEnabled(input))
 }
 
 func getSumValidMultiplications(input string) int {
@@ -32,6 +33,32 @@ func getSumValidMultiplications(input string) int {
 		a, _ := strconv.Atoi(multValues[0])
 		b, _ := strconv.Atoi(multValues[1])
 		sum += a * b
+	}
+
+	return sum
+}
+
+func getSumValidMultiplicationsEnabled(input string) int {
+	r, _ := regexp.Compile("mul\\([0-9]+,[0-9]+\\)|do\\(\\)|don't\\(\\)")
+	foundStrings := r.FindAllString(input, -1)
+
+	var sum int
+	isEnabled := true
+	for _, s := range foundStrings {
+		switch s {
+		case "do()":
+			isEnabled = true
+		case "don't()":
+			isEnabled = false
+		default:
+			if isEnabled == true {
+				r, _ := regexp.Compile("[0-9]+")
+				multValues := r.FindAllString(s, -1)
+				a, _ := strconv.Atoi(multValues[0])
+				b, _ := strconv.Atoi(multValues[1])
+				sum += a * b
+			}
+		}
 	}
 
 	return sum
