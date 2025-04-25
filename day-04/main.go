@@ -23,17 +23,27 @@ func main() {
 	//}
 	//fmt.Println("---")
 
-	var result int
-
+	var countXmas int
 	for i := range input {
 		for j := range input[i] {
 			if string(input[i][j]) == "X" {
-				result += checkAddress(input, Address{i, j})
+				countXmas += checkAddressXmas(input, Address{i, j})
 			}
 		}
 	}
 
-	fmt.Println("XMAS Count:", result)
+	fmt.Println("XMAS Count:", countXmas)
+
+	var countMas int
+	for i := range input {
+		for j := range input[i] {
+			if string(input[i][j]) == "A" {
+				countMas += checkAddressMas(input, Address{i, j})
+			}
+		}
+	}
+
+	fmt.Println("X-MAS Count:", countMas)
 }
 
 type Address struct {
@@ -46,7 +56,7 @@ type Direction struct {
 	colGrowth int
 }
 
-func checkAddress(matrix []string, address Address) int {
+func checkAddressXmas(matrix []string, address Address) int {
 	var r int
 
 	// Get Verticals
@@ -114,6 +124,29 @@ func checkDirection(matrix []string, address Address, direction Direction) strin
 	}
 
 	return r
+}
+
+func checkAddressMas(matrix []string, address Address) int {
+	isBorder := address.row == 0 || address.row == len(matrix)-1 || address.col == 0 || address.col == len(matrix[0])-1
+
+	if isBorder == true {
+		return 0
+	}
+
+	row := address.row
+	col := address.col
+
+	option := string(matrix[row-1][col-1]) + string(matrix[row][col]) + string(matrix[row+1][col+1])
+	if option != "MAS" && option != "SAM" {
+		return 0
+	}
+
+	option = string(matrix[row+1][col-1]) + string(matrix[row][col]) + string(matrix[row-1][col+1])
+	if option != "MAS" && option != "SAM" {
+		return 0
+	}
+
+	return 1
 }
 
 func readInput(name string) ([]string, error) {
